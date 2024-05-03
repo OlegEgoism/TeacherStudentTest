@@ -56,7 +56,7 @@ class FileForm(forms.ModelForm):
 
 
 class BoardForm(forms.ModelForm):
-    """Файл"""
+    """Доска"""
 
     class Meta:
         model = Board

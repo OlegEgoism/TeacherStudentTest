@@ -37,13 +37,6 @@ class BoardAdmin(admin.ModelAdmin):
     list_per_page = 20
 
 
-# @admin.register(BoardComment)
-# class BoardCommentAdmin(admin.ModelAdmin):
-#     """Коментарий"""
-#     list_display = 'board', 'author', 'created_at',
-#     list_filter = 'created_at',
-
-
 class FileInline(admin.TabularInline):
     """Файл"""
     model = File

@@ -20,6 +20,7 @@ def board(request):
 
 @login_required
 def add_board(request):
+    """Доска добавить"""
     if request.method == 'POST':
         form = BoardForm(request.POST)
         if form.is_valid():
