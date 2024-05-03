@@ -6,6 +6,11 @@
 
     <div class="title_page">Доска</div>
     <div class="home_page">
+        {% if request.user.is_authenticated %}
+            {% if request.user.role == 'teacher' %}
+                <a href="{% url 'add_board' %}" class="btn btn-primary">Добавить запись на доску</a>
+            {% endif %}
+        {% endif %}
         <ul>
             {% for board in boards %}
                 <h3><a href="{% url 'board_detail' board.id %}">{{ board.title }}</a></h3>

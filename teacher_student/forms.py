@@ -1,23 +1,7 @@
-# # from django import forms
-# # from django.contrib.auth.forms import AuthenticationForm
-# #
-# #
-# # class CustomUserCreationForm(AuthenticationForm):
-# #     """Вход"""
-# #     username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'style': 'margin:10px; width: 300px; padding:10px; height:20px', 'class': 'form-control col-sm-8', 'placeholder': 'Логин'}))
-# #     password = forms.CharField(label='Логин', widget=forms.PasswordInput(attrs={'style': 'margin:10px; width: 300px; padding:10px; height:20px', 'class': 'form-control col-sm-8', 'placeholder': 'Пароль'}))
-#
-# from django.contrib.auth.forms import UserCreationForm
-# from .models import CustomUser
-#
-# class CustomUserCreationForm(UserCreationForm):
-#     class Meta(UserCreationForm.Meta):
-#         model = CustomUser
-#         fields = 'username', 'password', 'fio',
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-from teacher_student.models import CustomUser, Task, File
+from teacher_student.models import CustomUser, Task, File, Board
 
 
 class RegistrationUserForm(UserCreationForm):
@@ -52,12 +36,28 @@ class UserAccountChangeForm(forms.ModelForm):
 
 
 class TaskForm(forms.ModelForm):
+    """Задание"""
+
+    def __init__(self, *args, **kwargs):
+        super(TaskForm, self).__init__(*args, **kwargs)
+        self.fields['assigned_to'].queryset = CustomUser.objects.filter(role=CustomUser.STUDENT)
+
     class Meta:
         model = Task
         fields = 'title', 'description', 'assigned_to'
 
 
 class FileForm(forms.ModelForm):
+    """Файл"""
+
     class Meta:
         model = File
         fields = 'files',
+
+
+class BoardForm(forms.ModelForm):
+    """Файл"""
+
+    class Meta:
+        model = Board
+        fields = 'title', 'description',

@@ -1,8 +1,9 @@
 from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegistrationUserForm, LoginUserForm, UserAccountChangeForm, TaskForm, FileForm
+from .forms import RegistrationUserForm, LoginUserForm, UserAccountChangeForm, TaskForm, FileForm, BoardForm
 from .models import CustomUser, Board, Task, BoardComment
+from django.http import HttpResponseBadRequest
 
 
 def home(request):
@@ -18,6 +19,20 @@ def board(request):
 
 
 @login_required
+def add_board(request):
+    if request.method == 'POST':
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            board = form.save(commit=False)
+            board.created_by = request.user
+            board.save()
+            return redirect('board')
+    else:
+        form = BoardForm()
+    return render(request, 'add_board.html', {'form': form})
+
+
+@login_required
 def board_detail(request, board_id):
     """Доска информация"""
     board = get_object_or_404(Board, id=board_id)
@@ -26,10 +41,12 @@ def board_detail(request, board_id):
 
 @login_required
 def add_comment(request, board_id):
-    """Доска коментарии"""
+    """Доска комментарии"""
     board = get_object_or_404(Board, id=board_id)
     if request.method == 'POST':
         text = request.POST.get('text')
+        if not text.strip():
+            return HttpResponseBadRequest("Текст комментария не может быть пустым")
         author = request.user
         BoardComment.objects.create(board=board, author=author, text=text)
     return redirect('board_detail', board_id=board_id)
@@ -38,17 +55,14 @@ def add_comment(request, board_id):
 @login_required
 def task(request):
     """Задание"""
-
     if request.user.is_teacher():
         tasks = Task.objects.filter(created_by=request.user)
     elif request.user.is_student():
         tasks = Task.objects.filter(assigned_to=request.user)
     else:
         tasks = Task.objects.none()
-
     task_form = TaskForm(request.POST or None)
     file_form = FileForm(request.POST or None, request.FILES or None)
-
     if request.method == 'POST':
         if task_form.is_valid() and file_form.is_valid():
             task = task_form.save(commit=False)
@@ -58,9 +72,7 @@ def task(request):
             file_instance.task = task
             file_instance.save()
             return redirect('task')
-
     show_form = request.user.is_authenticated and request.user.role == CustomUser.TEACHER
-
     return render(request, 'tasks.html', {'tasks': tasks, 'task_form': task_form, 'file_form': file_form, 'show_form': show_form})
 
 

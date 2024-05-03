@@ -18,14 +18,15 @@
                 {{ file_form.as_p }}
                 <button type="submit">Создать задание</button>
             </form>
+            <hr>
         {% endif %}
 
-        <hr>
         <ul>
             {% for task in tasks %}
                 <h3>{{ task.title }}</h3>
                 <p>Описание: {{ task.description }}</p>
-                <p>Создал(а): <span style="color: red"> {{ task.created_by }} </span>в ({{ task.created_at|date:"d.m.Y - H:i" }})</p>
+                <p>Создал(а): <span style="color: red"> {{ task.created_by }} </span>в
+                    ({{ task.created_at|date:"d.m.Y - H:i" }})</p>
                 {% if task.file_task.exists %}
                     <p>Файлы:</p>
                     <ul>

@@ -19,13 +19,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from teacher_student.views import home, board, board_detail, add_comment, user_registration, user_login, user_logout, user_account, task
+from teacher_student.views import home, board, add_board, board_detail, add_comment, user_registration, user_login, user_logout, user_account, task
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('task/', task, name='task'),
     path('board/', board, name='board'),
+    path('add_board/', add_board, name='add_board'),
     path('board/<int:board_id>/', board_detail, name='board_detail'),
     path('add_comment/<int:board_id>/', add_comment, name='add_comment'),
     path('registration/', user_registration, name='user_registration'),

@@ -113,6 +113,18 @@ nav a:hover {
     color: #d7b32a;
 }
 
+.user-info-home {
+    color: #d72a2a;
+    width: 980px;
+    margin: 20px auto;
+    height: fit-content;
+    padding: 10px;
+    background-color: #c1e6f9;
+    border-radius: 15px;
+    box-shadow: 10px 10px 15px 0 rgba(34, 60, 80, 0.2);
+}
+
+
 .nav-link.active {
     display: flex;
     height: 30px;
@@ -188,7 +200,7 @@ nav a:hover {
 }
 
 .login_form {
-    width: 960px;
+    width: 560px;
     margin: 20px auto;
     height: fit-content;
     padding: 10px;
