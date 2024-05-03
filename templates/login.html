@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход в личный аккаунт{% endblock %}
+
+{% block content %}
+
+    <div class="title_page">Вход в аккаунт</div>
+    <div class="home_page">
+        <div class="login_content">
+            <div class="login_form">
+                <form class="form_login" method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="form_button">
+                        <button type="submit">Вход</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

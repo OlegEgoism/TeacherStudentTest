@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Доска{% endblock %}
+
+{% block content %}
+
+    <div class="title_page">Доска</div>
+    <div class="home_page">
+        <h1>{{ board.title }}</h1>
+        <p>Описание: {{ board.description }}</p>
+        <p>Создал(а): <span style="color: red"> {{ board.created_by }} </span>в ({{ board.created_at|date:"d.m.Y - H:i" }})</p>
+
+        <form method="post" action="{% url 'add_comment' board.id %}">
+            {% csrf_token %}
+            <textarea name="text" rows="4" cols="50"></textarea><br>
+            <input type="submit" value="Добавить комментарий">
+        </form>
+
+        <h2>Комментарии:</h2>
+        <ul>
+            {% for comment in board.comments.all %}
+                <li>
+                    <span style="color: green"> {{ comment.author }} </span> написал(а) в {{ comment.created_at|date:"d.m.Y - H:i" }}
+                    <div>
+                        - {{ comment.text }}
+                    </div>
+                </li>
+                <hr>
+            {% empty %}
+                <li>На этой доске пока нет комментариев.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}

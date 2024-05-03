@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Аккаунт{% endblock %}
+
+{% block content %}
+
+    <div class="title_page">Аккаунт</div>
+    <div class="home_page">
+
+        <div class="login_form">
+            <h4>
+                Дата создания аккаунта: <span style="color: green"> {{ user.date_joined|date:"d.m.Y" }} </span>
+            </h4>
+            <h4>
+                Дата последнего входа: <span style="color: green"> {{ user.last_login|date:"d.m.Y H:i" }} </span>
+            </h4>
+            <h4>
+                Логин: <span style="color: green"> {{ user.username }} </span>
+            </h4>
+            <h4>
+                Статус: <span style="color: green">
+                {% if user.role == user.TEACHER %}
+                    Учитель
+                {% elif user.role == user.STUDENT %}
+                    Ученик
+                {% endif %}
+            </span>
+            </h4>
+            <form class="form_login" method="post" enctype="multipart/form-data" id="photoForm">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input style="width: 200px;height: 40px; margin-bottom: 20px; border-radius: 10px" class="form_login_button" type="submit" value="Сохранить">
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

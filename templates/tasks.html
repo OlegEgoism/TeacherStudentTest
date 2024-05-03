@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Задание{% endblock %}
+
+{% block content %}
+
+    <div class="title_page">Задание</div>
+    <div class="home_page">
+
+        {% if show_form %}
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ task_form.as_p }}
+                {{ file_form.as_p }}
+                {{ file_form.as_p }}
+                {{ file_form.as_p }}
+                {{ file_form.as_p }}
+                {{ file_form.as_p }}
+                <button type="submit">Создать задание</button>
+            </form>
+        {% endif %}
+
+        <hr>
+        <ul>
+            {% for task in tasks %}
+                <h3>{{ task.title }}</h3>
+                <p>Описание: {{ task.description }}</p>
+                <p>Создал(а): <span style="color: red"> {{ task.created_by }} </span>в ({{ task.created_at|date:"d.m.Y - H:i" }})</p>
+                {% if task.file_task.exists %}
+                    <p>Файлы:</p>
+                    <ul>
+                        {% for file in task.file_task.all %}
+                            {% if file.files %}
+                                <li>Скачать -> <a href="{{ file.files.url }}" download>{{ file.files.name }}</a></li>
+                            {% else %}
+                                <li>Файл отсутствует</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <hr>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock %}
