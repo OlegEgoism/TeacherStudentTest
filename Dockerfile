@@ -1,5 +1,5 @@
 # Используем образ Python версии 3.8
-FROM python:3.8
+FROM python:3.10-alpine3.14
 
 # Устанавливаем переменную окружения для Python, чтобы вывод был приятным
 ENV PYTHONUNBUFFERED 1

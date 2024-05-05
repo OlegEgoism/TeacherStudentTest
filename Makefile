@@ -9,3 +9,9 @@ createsuperuser:
 
 run:
 	python manage.py runserver
+
+build:
+	sudo docker build -t tst .
+
+drun:
+	sudo docker run -p 8000:8000 tst
