@@ -8,20 +8,8 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
 # Копируем файлы requirements.txt в /app
-COPY requirements.txt /app/
+COPY . .
 
 # Устанавливаем зависимости из файла requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Копируем все файлы из текущего каталога в /app
-COPY . /app/
-
-# Выполняем миграции
-RUN python manage.py makemigrations
-RUN python manage.py migrate
-
-# Экспортируем порт 8000, который будет прослушиваться внутри контейнера
-EXPOSE 8000
-
-# Запускаем сервер Django
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
