@@ -1,4 +1,4 @@
-# Используем образ Python версии 3.8
+# Используем образ Python версии 3.10
 FROM python:3.10-alpine3.14
 
 # Устанавливаем переменную окружения для Python, чтобы вывод был приятным
@@ -15,6 +15,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем все файлы из текущего каталога в /app
 COPY . /app/
+
+# Выполняем миграции
+RUN python manage.py makemigrations
+RUN python manage.py migrate
 
 # Экспортируем порт 8000, который будет прослушиваться внутри контейнера
 EXPOSE 8000
