@@ -46,7 +46,8 @@ class FileInline(admin.TabularInline):
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     """Задание"""
-    list_display = 'title', 'created_at', 'created_by', 'assigned_to',
-    list_filter = 'created_at', 'created_by', 'assigned_to',
+    list_display = 'title', 'created_at', 'created_by', 'assigned_to', 'read',
+    list_filter = 'created_at', 'created_by', 'assigned_to', 'read',
+    list_editable = 'read',
     inlines = FileInline,
     list_per_page = 20

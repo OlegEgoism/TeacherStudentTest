@@ -68,6 +68,7 @@ class Task(models.Model):
     created_at = models.DateTimeField(verbose_name='Время создания', auto_now_add=True)
     created_by = models.ForeignKey(CustomUser, verbose_name='Создал задание', on_delete=models.CASCADE, related_name='created_tasks')
     assigned_to = models.ForeignKey(CustomUser, verbose_name='Кому задание', on_delete=models.CASCADE, related_name='assigned_tasks')
+    read = models.BooleanField(verbose_name='Прочитано', default=False)
 
     class Meta:
         verbose_name = 'Задание'

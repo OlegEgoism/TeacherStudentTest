@@ -8,14 +8,18 @@ from django.http import HttpResponseBadRequest
 
 def home(request):
     """Главная страница"""
-    return render(request, 'home.html')
+    unread_count = 0
+    if request.user.is_authenticated:
+        unread_count = Task.objects.filter(read=False, assigned_to=request.user).count()
+    return render(request, 'home.html', {'unread_count': unread_count})
 
 
 @login_required
 def board(request):
     """Доска"""
     boards = Board.objects.all()
-    return render(request, 'board.html', {'boards': boards})
+    unread_count = Task.objects.filter(read=False, assigned_to=request.user).count()
+    return render(request, 'board.html', {'boards': boards, 'unread_count': unread_count})
 
 
 @login_required
@@ -37,7 +41,8 @@ def add_board(request):
 def board_detail(request, board_id):
     """Доска информация"""
     board = get_object_or_404(Board, id=board_id)
-    return render(request, 'board_detail.html', {'board': board})
+    unread_count = Task.objects.filter(read=False, assigned_to=request.user).count()
+    return render(request, 'board_detail.html', {'board': board, 'unread_count': unread_count})
 
 
 @login_required
@@ -62,6 +67,9 @@ def task(request):
         tasks = Task.objects.filter(assigned_to=request.user)
     else:
         tasks = Task.objects.none()
+    unread_count = Task.objects.filter(read=False, assigned_to=request.user).count()
+    tasks_to_update = Task.objects.filter(read=False, assigned_to=request.user)
+    tasks_to_update.update(read=True)
     task_form = TaskForm(request.POST or None)
     file_form = FileForm(request.POST or None, request.FILES or None)
     if request.method == 'POST':
@@ -74,7 +82,7 @@ def task(request):
             file_instance.save()
             return redirect('task')
     show_form = request.user.is_authenticated and request.user.role == CustomUser.TEACHER
-    return render(request, 'tasks.html', {'tasks': tasks, 'task_form': task_form, 'file_form': file_form, 'show_form': show_form})
+    return render(request, 'tasks.html', {'tasks': tasks, 'task_form': task_form, 'file_form': file_form, 'show_form': show_form, 'unread_count': unread_count, 'tasks_to_update': tasks_to_update})
 
 
 def user_registration(request):
@@ -127,7 +135,9 @@ def user_account(request, user_id):
             return redirect('user_account', user_id=user_id)
     else:
         form = UserAccountChangeForm(instance=user)
+    unread_count = Task.objects.filter(read=False, assigned_to=request.user).count()
     return render(request, 'account.html', {
         'form': form,
-        'user': user
+        'user': user,
+        'unread_count': unread_count
     })
